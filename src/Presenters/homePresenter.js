@@ -3,7 +3,7 @@ import HomeView from "../Views/homeView/homeView";
 import NoUserView from "../Views/nouserView";
 import { useNavigate } from 'react-router-dom'
 import { onAuthStateChanged} from "firebase/auth";
-import { auth, signingOut } from "../firebase/firebaseModel";
+import {  signingOut, authChange } from "../firebase/firebaseModel";
 import { useState , useEffect } from "react";
 
 export default
@@ -15,17 +15,34 @@ function Home(props){
     const [user, setUser] = useState(props.model.currentUser);
 
 
-/*     if (handleAuthState) {
-        if (initializing) setInitializing(false)
-    }
-    useEffect(() => {
-        const subscriber = handleAuthState();
+/*     function AuthStateChanged(user) {
+        setUser(user);
+        if (initializing) setInitializing(false);
+      }
+    
+      useEffect(() => {
+        const subscriber = authChange(AuthStateChanged);
         return subscriber; // unsubscribe on unmount
       }, []);
-
     
-    if (initializing) return null; */
+      if (initializing) return null; */
 
+      function wasCreatedACB(){           // 1. the component has been created
+        props.model.addObserver(observerACB);      
+        return function isTakenDownACB(){
+            props.model.removeObserver(observerACB)
+        };  // 2. the component is being taken down 
+    }
+    React.useEffect(wasCreatedACB, []); 
+
+    function observerACB(){   
+        setUser(props.model.currentUser)
+        }
+  
+  
+    React.useEffect(() => {
+        if (user) navigate("/home");
+      }, [user]);
 
     function redirectHomeACB(){
         navigate('/home')

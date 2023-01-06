@@ -10,14 +10,8 @@ const auth = getAuth();
 const REF = "authdb"
 
 
-function authChange(model){
-    onAuthStateChanged(auth, (user) =>{
-        if (user) {
-            model.setUser(user)
-          } else {
-            //return false
-          }
-    })
+function authChange(setuser){
+    onAuthStateChanged(auth, setuser)
 }
 
 
@@ -55,7 +49,6 @@ function signIn(email, password) {
     }
 
     function updateAccount(username) {
-        const auth = getAuth();
         updateProfile(auth.currentUser, {
             displayName: username
         }).then(() => {
@@ -75,6 +68,7 @@ function signIn(email, password) {
                 createUserWithEmailAndPassword(auth, email, password, username)
                     .then((userCredential) => {
                         const user = userCredential.user;
+                        console.log(user);
                         console.log("created account")
                         set(ref(db, REF + "/users/publicUsers/" + username), {
                             username: username,
@@ -84,10 +78,8 @@ function signIn(email, password) {
                         })
                     })
                     .catch((error) => {
-                        const errorCode = error.code;
                         const errorMessage = error.message;
-                        console.log(errorCode, errorMessage)
-                        alert(errorCode)
+                        alert(errorMessage)
                     });
             }
             else {

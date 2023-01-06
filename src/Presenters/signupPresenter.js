@@ -15,22 +15,6 @@ function Signup(props){
     const [userSignedIn, setUserSignup] = React.useState(props.model.currentUser) // check that user logged in before showcase (props.model.loggedIn if others wish to reach it)
 
 
-    onAuthStateChanged(auth, (user) =>{
-        if (user) {
-            props.model.setUser(user)
-          } else {
-            //return false
-          }
-    })
-    
-    React.useEffect(() => {
-        if (userSignedIn) {
-            updateAccount(username)
-            navigate("/home");
-        }
-      }, [userSignedIn]);
-
-
 
     function wasCreatedACB(){           // 1. the component has been created
         props.model.addObserver(observerACB);      
@@ -39,6 +23,13 @@ function Signup(props){
         };  // 2. the component is being taken down 
     }
     React.useEffect(wasCreatedACB, []); 
+
+    React.useEffect(() => {
+        if (userSignedIn) {
+            updateAccount(username)
+            navigate("/home");
+        }
+      }, [userSignedIn]);
     
     function observerACB(){   
         setUserSignup(props.model.currentUser)

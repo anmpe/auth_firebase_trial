@@ -11,14 +11,6 @@ function LogIn(props){
     const [email, setEmail ] = React.useState(props.model.email) // definiera email och password i modelen/application state för att kunna ändra det här
     const [password, setPassword] = React.useState(props.model.password)
     const [userLoggedIn, setUserLogin] = React.useState(props.model.currentUser) // check that user logged in before showcase (props.model.loggedIn if others wish to reach it)
-
-    onAuthStateChanged(auth, (user) =>{
-        if (user) {
-            props.model.setUser(user)
-          } else {
-            //return false
-          }
-    })
     
     function wasCreatedACB(){           // 1. the component has been created
         props.model.addObserver(observerACB);      
@@ -39,7 +31,6 @@ function LogIn(props){
         if (userLoggedIn) navigate("/home");
       }, [userLoggedIn]);
 
-    
     
     function signInACB(){
         signIn(email, password)
